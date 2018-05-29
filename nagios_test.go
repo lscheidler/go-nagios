@@ -40,14 +40,14 @@ func TestCritical(t *testing.T) {
   nagios := Init()
   nagios.Critical("message")
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(message)")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(message)")
 }
 
 func TestWarning(t *testing.T) {
   nagios := Init()
   nagios.Warning("message")
 
-  testMsg(t, &nagios, 2, "WARNING - warning(message)")
+  testMsg(t, &nagios, 1, "WARNING - warning(message)")
 }
 
 func TestUnknown(t *testing.T) {
@@ -69,14 +69,14 @@ func TestCheckThresholdCritical(t *testing.T) {
   nagios := Init()
   nagios.CheckThreshold("test", 5, 4, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.000000) | test=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.000000) | test=5.000000")
 }
 
 func TestCheckThresholdWarning(t *testing.T) {
   nagios := Init()
   nagios.CheckThreshold("test", 5, 4, math.NaN())
 
-  testMsg(t, &nagios, 2, "WARNING - warning(test=5.000000) | test=5.000000")
+  testMsg(t, &nagios, 1, "WARNING - warning(test=5.000000) | test=5.000000")
 }
 
 func TestCheckThresholdOk(t *testing.T) {
@@ -91,12 +91,12 @@ func TestCheckThresholdMultiple(t *testing.T) {
   nagios.CheckThreshold("test", 5, 4, 4)
   nagios.CheckThreshold("test2", 5, 4, math.NaN())
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.000000) warning(test2=5.000000) | test=5.000000 test2=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.000000) warning(test2=5.000000) | test=5.000000 test2=5.000000")
 
   nagios.CheckThreshold("test3", 5, 8, math.NaN())
   nagios.CheckThreshold("test4", 5, 8, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.000000, test4=5.000000) warning(test2=5.000000) ok(test3=5.000000) | test=5.000000 test2=5.000000 test3=5.000000 test4=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.000000, test4=5.000000) warning(test2=5.000000) ok(test3=5.000000) | test=5.000000 test2=5.000000 test3=5.000000 test4=5.000000")
 }
 
 func TestCheckThresholdWithoutPerfdata(t *testing.T) {
@@ -104,21 +104,21 @@ func TestCheckThresholdWithoutPerfdata(t *testing.T) {
   nagios.ShowPerfdata = false
   nagios.CheckThreshold("test", 5, 4, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.000000)")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.000000)")
 }
 
 func TestCheckPercentageThresholdCritical(t *testing.T) {
   nagios := Init()
   nagios.CheckPercentageThreshold("test", 5, 100, 4, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.00%) | test=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.00%) | test=5.000000")
 }
 
 func TestCheckPercentageThresholdWarning(t *testing.T) {
   nagios := Init()
   nagios.CheckPercentageThreshold("test", 5, 100, 4, math.NaN())
 
-  testMsg(t, &nagios, 2, "WARNING - warning(test=5.00%) | test=5.000000")
+  testMsg(t, &nagios, 1, "WARNING - warning(test=5.00%) | test=5.000000")
 }
 
 func TestCheckPercentageThresholdOk(t *testing.T) {
@@ -133,12 +133,12 @@ func TestCheckPercentageThresholdMultiple(t *testing.T) {
   nagios.CheckPercentageThreshold("test", 5, 100, 4, 4)
   nagios.CheckPercentageThreshold("test2", 5, 100, 4, math.NaN())
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.00%) warning(test2=5.00%) | test=5.000000 test2=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.00%) warning(test2=5.00%) | test=5.000000 test2=5.000000")
 
   nagios.CheckPercentageThreshold("test3", 5, 100, 8, math.NaN())
   nagios.CheckPercentageThreshold("test4", 5, 100, 8, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.00%, test4=5.00%) warning(test2=5.00%) ok(test3=5.00%) | test=5.000000 test2=5.000000 test3=5.000000 test4=5.000000")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.00%, test4=5.00%) warning(test2=5.00%) ok(test3=5.00%) | test=5.000000 test2=5.000000 test3=5.000000 test4=5.000000")
 }
 
 func TestCheckPercentageThresholdWithoutPerfdata(t *testing.T) {
@@ -146,7 +146,7 @@ func TestCheckPercentageThresholdWithoutPerfdata(t *testing.T) {
   nagios.ShowPerfdata = false
   nagios.CheckPercentageThreshold("test", 5, 100, 4, 4)
 
-  testMsg(t, &nagios, 1, "CRITICAL - critical(test=5.00%)")
+  testMsg(t, &nagios, 2, "CRITICAL - critical(test=5.00%)")
 }
 
 func testMsg(t *testing.T, nagios *Nagios, expectedExitCode int, expectedMsg string) {

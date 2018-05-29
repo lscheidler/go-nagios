@@ -109,13 +109,13 @@ func (nagios *Nagios) getMsg() (int, string) {
   msg := ""
   if len(nagios.critical) > 0 {
     prefix = "CRITICAL -"
-    exitcode = 1
+    exitcode = 2
     msg += " critical(" + strings.Join(nagios.critical, ", ") + ")"
   }
   if len(nagios.warning) > 0 {
     if exitcode == 0 {
       prefix = "WARNING -"
-      exitcode = 2
+      exitcode = 1
     }
     msg += " warning(" + strings.Join(nagios.warning, ", ") + ")"
   }
