@@ -1,5 +1,6 @@
-# 0.1.2 (UNRELEASED)
+# 0.1.2 (2021-03-04)
 
+- added go.mod
 - used go fmt to format code
 - fix golint warnings
 
