@@ -1,3 +1,3 @@
-module github.com/lscheidler/go-nagios/v1
+module github.com/lscheidler/go-nagios
 
 go 1.14
