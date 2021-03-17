@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Lars Eric Scheidler
+ * Copyright 2021 Lars Eric Scheidler
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import (
 
 // Nagios holds the nagios message representation
 type Nagios struct {
+	name         string
 	ok           []string
 	warning      []string
 	critical     []string
@@ -34,9 +35,10 @@ type Nagios struct {
 	ShowPerfdata bool
 }
 
-// Init initialize basis nagios struct
-func Init() Nagios {
-	return Nagios{
+// New initialize basis nagios struct
+func New() *Nagios {
+	return &Nagios{
+		name:         "",
 		ShowPerfdata: true,
 	}
 }
@@ -46,6 +48,11 @@ func (nagios *Nagios) Exit() {
 	exitcode, msg := nagios.getMsg()
 	fmt.Println(msg)
 	os.Exit(exitcode)
+}
+
+// SetName sets the name used in message
+func (nagios *Nagios) SetName(name string) {
+	nagios.name = name
 }
 
 // Critical adds new critical message
@@ -132,6 +139,10 @@ func (nagios *Nagios) getMsg() (int, string) {
 	if msg == "" {
 		msg += " Everything is ok"
 	}
+	if nagios.name != "" {
+		msg = fmt.Sprintf(" %s:%s", nagios.name, msg)
+	}
+
 	return exitcode, prefix + msg + nagios.getPerfdataMsg()
 }
 

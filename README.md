@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-  nagios := nagios.Init()
+  nagios := nagios.New()
+  nagios.SetName("myCheck")
   defer nagios.Exit()
 
   // do not add perfdata to message, default is true
@@ -33,6 +34,18 @@ func main() {
 
   // check percentage calculated from valueP and maxP against warningP and criticalP thresholds
   nagios.CheckPercentageThreshold("percentage.example", valueP, maxP, warningP, criticalP)
+
+  // add Ok
+  nagios.Ok("This is ok.")
+
+  // add Warning
+  nagios.Warning("This is a warning.")
+
+  // add Critical
+  nagios.Critical("This is a critical.")
+
+  // add Unknown
+  nagios.Unknown("This is an unknown.")
 }
 ```
 
